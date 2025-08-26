@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview de Fuentes - Google Fonts</title>
+    
+    <!-- Importar fuentes de Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@300;400;600&family=Nunito+Sans:wght@300;400;600&family=Open+Sans:wght@300;400;600&family=Quicksand:wght@300;400;600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #FFA69E, #FAF3DD, #B8F2E8, #AED9E0);
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #5E6472;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+        }
+        
+        .font-option {
+            margin-bottom: 40px;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 5px solid #FFA69E;
+            background: #f8f9fa;
+        }
+        
+        .font-name {
+            font-size: 1.5em;
+            color: #5E6472;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .font-preview {
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .font-preview h2 {
+            margin: 0 0 15px 0;
+            color: #5E6472;
+        }
+        
+        .font-preview p {
+            margin: 5px 0;
+            line-height: 1.6;
+        }
+        
+        .weight-300 { font-weight: 300; }
+        .weight-400 { font-weight: 400; }
+        .weight-600 { font-weight: 600; }
+        
+        .code {
+            background: #5E6472;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+        
+        .recommendation {
+            background: #B8F2E8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #5E6472;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Preview de Fuentes para tu Sitio Web</h1>
+        
+        <!-- Opción 1: Inter -->
+        <div class="font-option">
+            <div class="font-name">1. Inter</div>
+            <div class="font-preview" style="font-family: 'Inter', sans-serif;">
+                <h2 class="weight-600">Título Principal (Weight 600)</h2>
+                <p class="weight-400">Este es un párrafo normal con peso 400. Inter es una fuente moderna y muy legible, perfecta para sitios web profesionales.</p>
+                <p class="weight-300">Texto más ligero con peso 300. Muy elegante para subtítulos y elementos secundarios.</p>
+            </div>
+            <div class="code">font-family: 'Inter', sans-serif;</div>
+            <div class="recommendation">
+                <strong>💡 Recomendación:</strong> Muy moderna, excelente legibilidad, perfecta para sitios profesionales.
+            </div>
+        </div>
+        
+        <!-- Opción 2: Poppins -->
+        <div class="font-option">
+            <div class="font-name">2. Poppins</div>
+            <div class="font-preview" style="font-family: 'Poppins', sans-serif;">
+                <h2 class="weight-600">Título Principal (Weight 600)</h2>
+                <p class="weight-400">Este es un párrafo normal con peso 400. Poppins tiene un diseño geométrico suave y muy versátil.</p>
+                <p class="weight-300">Texto más ligero con peso 300. Los bordes redondeados le dan un toque amigable y moderno.</p>
+            </div>
+            <div class="code">font-family: 'Poppins', sans-serif;</div>
+            <div class="recommendation">
+                <strong>💡 Recomendación:</strong> Elegante, moderna, combina perfecto con colores pasteles. Muy popular.
+            </div>
+        </div>
+        
+        <!-- Opción 3: Nunito Sans -->
+        <div class="font-option">
+            <div class="font-name">3. Nunito Sans</div>
+            <div class="font-preview" style="font-family: 'Nunito Sans', sans-serif;">
+                <h2 class="weight-600">Título Principal (Weight 600)</h2>
+                <p class="weight-400">Este es un párrafo normal con peso 400. Nunito Sans tiene bordes redondeados suaves y es muy legible.</p>
+                <p class="weight-300">Texto más ligero con peso 300. Perfecta para pantallas y dispositivos móviles.</p>
+            </div>
+            <div class="code">font-family: 'Nunito Sans', sans-serif;</div>
+            <div class="recommendation">
+                <strong>💡 Recomendación:</strong> Amigable, moderna, excelente para la web. Bordes suaves que combinan con tu paleta.
+            </div>
+        </div>
+        
+        <!-- Opción 4: Open Sans -->
+        <div class="font-option">
+            <div class="font-name">4. Open Sans</div>
+            <div class="font-preview" style="font-family: 'Open Sans', sans-serif;">
+                <h2 class="weight-600">Título Principal (Weight 600)</h2>
+                <p class="weight-400">Este es un párrafo normal con peso 400. Open Sans es una fuente clásica y muy confiable.</p>
+                <p class="weight-300">Texto más ligero con peso 300. Funciona bien en todos los tamaños y dispositivos.</p>
+            </div>
+            <div class="code">font-family: 'Open Sans', sans-serif;</div>
+            <div class="recommendation">
+                <strong>💡 Recomendación:</strong> Clásica, confiable, estándar de la industria. Muy segura.
+            </div>
+        </div>
+        
+        <!-- Opción 5: Quicksand -->
+        <div class="font-option">
+            <div class="font-name">5. Quicksand</div>
+            <div class="font-preview" style="font-family: 'Quicksand', sans-serif;">
+                <h2 class="weight-600">Título Principal (Weight 600)</h2>
+                <p class="weight-400">Este es un párrafo normal con peso 400. Quicksand tiene un diseño redondeado muy distintivo.</p>
+                <p class="weight-300">Texto más ligero con peso 300. Muy moderna y llamativa, perfecta para sitios creativos.</p>
+            </div>
+            <div class="code">font-family: 'Quicksand', sans-serif;</div>
+            <div class="recommendation">
+                <strong>💡 Recomendación:</strong> Muy moderna y distintiva. Perfecta si quieres algo único y creativo.
+            </div>
+        </div>
+        
+        <!-- Opción 6: Montserrat -->
+        <div class="font-option">
+            <div class="font-name">6. Montserrat</div>
+            <div class="font-preview" style="font-family: 'Montserrat', sans-serif;">
+                <h2 class="weight-600">Título Principal (Weight 600)</h2>
+                <p class="weight-400">Este es un párrafo normal con peso 400. Montserrat es elegante y muy versátil.</p>
+                <p class="weight-300">Texto más ligero con peso 300. Muy popular en sitios de diseño y creatividad.</p>
+            </div>
+            <div class="code">font-family: 'Montserrat', sans-serif;</div>
+            <div class="recommendation">
+                <strong>💡 Recomendación:</strong> Elegante, versátil, muy popular en sitios creativos y de diseño.
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 40px; padding: 20px; background: #FAF3DD; border-radius: 10px;">
+            <h3 style="color: #5E6472;">🎯 ¿Cuál te gusta más?</h3>
+            <p style="color: #5E6472;">Una vez que elijas, puedo implementarla en tu sitio web con la paleta de colores que ya tienes.</p>
+        </div>
+    </div>
+</body>
+</html>
