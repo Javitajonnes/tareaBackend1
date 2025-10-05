@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from decimal import Decimal
 
 class Noticia(models.Model):
     titulo = models.CharField(max_length=100, verbose_name="Título")
@@ -22,7 +23,7 @@ class Replica(models.Model):
     detalle = models.TextField(verbose_name="Detalle")
     numero = models.SmallIntegerField(verbose_name="Número")
     imagen = models.ImageField(upload_to='replicas/', blank=True, null=True, verbose_name="Imagen")
-    precio = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name="Precio")
+    precio = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'), verbose_name="Precio")
     created = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updated = models.DateTimeField(auto_now=True, verbose_name="Fecha de actualización")
 

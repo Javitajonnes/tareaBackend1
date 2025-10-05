@@ -71,7 +71,7 @@
         Este header permite personalizar el título, subtítulo e imagen de fondo
         usando bloques de Django. Por defecto muestra información de noticias.
         -->
-        <header class="masthead" style="background-image: url({% block bgr %}{% static 'posteo/assets/img/post-bg.jpg' %}{% endblock %})">
+        <header class="masthead" style="background-image: url({% block bgr %}{{ banner_image }}{% endblock %})">
             <div class="container position-relative px-4 px-lg-5">
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7">

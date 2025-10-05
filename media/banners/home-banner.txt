@@ -1,0 +1,5 @@
+# Banner para página Home/Inicio
+# Esta imagen se mostrará en la página principal
+# Dimensiones recomendadas: 1920x600px
+# Formato: JPG o PNG
+# Contenido sugerido: Logo de Blogfiction, elementos de juegos, colores corporativos

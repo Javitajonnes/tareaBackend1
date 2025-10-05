@@ -79,12 +79,32 @@
         }
 
         #banner {
-            background-color: #021baa; 
+            background-image: url({{ banner_image }});
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             grid-row: 1;
             grid-column: 1 / 4;
             padding: 40px 20px;
             text-align: center;
             color: white;
+            position: relative;
+        }
+        
+        #banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(2, 27, 170, 0.7);
+            z-index: 1;
+        }
+        
+        #banner h1, #banner p {
+            position: relative;
+            z-index: 2;
         }
         
         #banner h1 {

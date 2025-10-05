@@ -1,0 +1,5 @@
+# Banner para página Gallery/Galería
+# Esta imagen se mostrará en la galería de imágenes
+# Dimensiones recomendadas: 1920x600px
+# Formato: JPG o PNG
+# Contenido sugerido: Colección de cartas, eventos, torneos, tecnología lúdica

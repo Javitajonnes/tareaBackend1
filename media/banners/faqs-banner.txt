@@ -1,0 +1,5 @@
+# Banner para página FAQs/Preguntas Frecuentes
+# Esta imagen se mostrará en la página de preguntas frecuentes
+# Dimensiones recomendadas: 1920x600px
+# Formato: JPG o PNG
+# Contenido sugerido: Elementos de ayuda, preguntas, soporte, comunidad

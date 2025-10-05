@@ -1,0 +1,5 @@
+# Banner para página About/Sobre Nosotros
+# Esta imagen se mostrará en la página sobre nosotros
+# Dimensiones recomendadas: 1920x600px
+# Formato: JPG o PNG
+# Contenido sugerido: Equipo de Blogfiction, academia de duelos, instalaciones

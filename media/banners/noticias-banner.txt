@@ -1,0 +1,5 @@
+# Banner para página de Noticias
+# Esta imagen se mostrará en la sección de noticias
+# Dimensiones recomendadas: 1920x600px
+# Formato: JPG o PNG
+# Contenido sugerido: Elementos de noticias, periódicos, tecnología lúdica
