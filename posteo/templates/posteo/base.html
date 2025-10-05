@@ -1,76 +1,118 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Clean Blog - Start Bootstrap Theme</title>
-        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <meta name="description" content="Blogfiction.cl - Academia de duelos, feria de coleccionismo y tecnología lúdica" />
+        <meta name="author" content="Equipo Blogfiction" />
+        <title>{% block title %}Blogfiction.cl - Noticias{% endblock %}</title>
+        
+        <!-- Favicon -->
+        <link rel="icon" type="image/x-icon" href="{% static 'posteo/assets/favicon.ico' %}" />
+        
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-        <!-- Google fonts-->
-        <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css" />
-        <!-- Core theme CSS (includes Bootstrap)-->        
-        <link href=" {% static 'posteo/css/styles.css' %}" rel="stylesheet" />
+        
+        <!-- Google fonts - Consistentes con core/base.html -->
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" type="text/css" />
+        
+        <!-- Core theme CSS (includes Bootstrap) desde archivos estáticos -->        
+        <link href="{% static 'posteo/css/styles.css' %}" rel="stylesheet" />
     </head>
     <body>
-        <!-- Navigation-->
+        <!-- 
+        =============================================================================
+        NAVEGACIÓN PRINCIPAL - DINÁMICA CON DJANGO
+        =============================================================================
+        
+        Esta navegación usa URLs dinámicas de Django para mantener consistencia
+        con el resto del sitio y facilitar el mantenimiento.
+        -->
         <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
             <div class="container px-4 px-lg-5">
-                <a class="navbar-brand" href="index.html">Start Bootstrap</a>
+                <!-- Logo/Brand que lleva a la página principal -->
+                <a class="navbar-brand" href="{% url 'home' %}">Blogfiction.cl</a>
+                
+                <!-- Botón para menú móvil -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     Menu
                     <i class="fas fa-bars"></i>
                 </button>
+                
+                <!-- Menú de navegación colapsable -->
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto py-4 py-lg-0">
-                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'home' %}">Home</a></li>
-                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'noticias' %}">Noticias</a></li>
-                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="#!">About</a></li>
-                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="#!">Contact</a></li>
+                        <!-- Enlaces usando URLs dinámicas de Django -->
+                        <li class="nav-item">
+                            <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'home' %}">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'noticias' %}">Noticias</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'about' %}">Sobre Nosotros</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'gallery' %}">Galería</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'faqs' %}">FAQs</a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
-        <!-- Page Header-->
-        <header class="masthead" style="background-image: url({% block bgr %}  {% endblock %})">
+        <!-- 
+        =============================================================================
+        HEADER DE PÁGINA - PERSONALIZABLE
+        =============================================================================
+        
+        Este header permite personalizar el título, subtítulo e imagen de fondo
+        usando bloques de Django. Por defecto muestra información de noticias.
+        -->
+        <header class="masthead" style="background-image: url({% block bgr %}{% static 'posteo/assets/img/post-bg.jpg' %}{% endblock %})">
             <div class="container position-relative px-4 px-lg-5">
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7">
                         <div class="site-heading">
-                            <h1>Clean Blog</h1>
-                            <span class="subheading">A Blog Theme by Start Bootstrap</span>
+                            <h1>{% block page_title %}Blogfiction.cl{% endblock %}</h1>
+                            <span class="subheading">{% block page_subtitle %}"Que no te lo cuenten, juegalo!!"{% endblock %}</span>
                         </div>
                     </div>
                 </div>
             </div>
         </header>
-        <!-- Main Content-->
+        <!-- 
+        =============================================================================
+        CONTENIDO PRINCIPAL
+        =============================================================================
+        
+        Área donde se renderiza el contenido específico de cada página
+        usando el bloque 'content' de Django.
+        -->
         <div class="container px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 {% block content %} {% endblock %}
-        
-        
+            </div>
         </div>
-        <!-- Footer-->
+        
+        <!-- 
+        =============================================================================
+        FOOTER - REDES SOCIALES DE BLOGFICTION
+        =============================================================================
+        
+        Footer con enlaces a redes sociales de Blogfiction y información
+        de copyright actualizada.
+        -->
         <footer class="border-top">
             <div class="container px-4 px-lg-5">
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7">
+                        <!-- Redes sociales de Blogfiction -->
                         <ul class="list-inline text-center">
                             <li class="list-inline-item">
-                                <a href="#!">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fas fa-circle fa-stack-2x"></i>
-                                        <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#!">
+                                <a href="https://facebook.com/blogfiction" target="_blank" rel="noopener">
                                     <span class="fa-stack fa-lg">
                                         <i class="fas fa-circle fa-stack-2x"></i>
                                         <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
@@ -78,22 +120,45 @@
                                 </a>
                             </li>
                             <li class="list-inline-item">
-                                <a href="#!">
+                                <a href="https://instagram.com/blogfiction" target="_blank" rel="noopener">
                                     <span class="fa-stack fa-lg">
                                         <i class="fas fa-circle fa-stack-2x"></i>
-                                        <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                                        <i class="fab fa-instagram fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="https://twitter.com/blogfiction" target="_blank" rel="noopener">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
                                     </span>
                                 </a>
                             </li>
                         </ul>
-                        <div class="small text-center text-muted fst-italic">Copyright &copy; Your Website 2023</div>
+                        
+                        <!-- Información de copyright y descripción -->
+                        <div class="small text-center text-muted fst-italic">
+                            <p><strong>Blogfiction.cl</strong></p>
+                            <p>Academia de duelos • Feria de coleccionismo • Tecnología lúdica</p>
+                            <p>Copyright &copy; Blogfiction.cl 2025 - Todos los derechos reservados</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </footer>
+        <!-- 
+        =============================================================================
+        SCRIPTS JAVASCRIPT
+        =============================================================================
+        
+        Scripts necesarios para el funcionamiento del sitio:
+        - Bootstrap JS para componentes interactivos
+        - Scripts personalizados desde archivos estáticos
+        -->
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->        
+        <!-- Core theme JS desde archivos estáticos -->        
         <script src="{% static 'posteo/js/scripts.js' %}"></script>
     </body>
 </html>

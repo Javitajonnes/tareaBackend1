@@ -1,32 +1,43 @@
 {% extends 'posteo/base.html' %}
 {% load static %}
+
+<!-- Personalizar título de la página -->
+{% block title %}Blogfiction.cl - Últimas Noticias{% endblock %}
+
+<!-- Personalizar imagen de fondo del header -->
 {% block bgr %}  
 {% static 'posteo/assets/img/post-bg.jpg' %}
 {% endblock %}
+
+<!-- Personalizar título y subtítulo del header -->
+{% block page_title %}Últimas Noticias{% endblock %}
+{% block page_subtitle %}Mantente al día con nuestras publicaciones{% endblock %}
 
 {% block content %}
 <style>
     /* Estilos consistentes con core/base.html */
     .noticias-container {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 20px;
+        max-width: 900px;        /* Ancho máximo para mejor legibilidad */
+        margin: 0 auto;          /* Centrar horizontalmente */
+        padding: 20px;           /* Espaciado interno */
     }
     
+    /* Tarjeta individual de noticia */
     .noticia-card {
-        background: #fff;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        margin-bottom: 2rem;
-        transition: all 0.3s ease;
-        border: 2px solid #9ab7f5;
+        background: #fff;                    /* Fondo blanco */
+        border-radius: 15px;                 /* Bordes redondeados */
+        overflow: hidden;                    /* Ocultar contenido que se desborde */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* Sombra sutil */
+        margin-bottom: 2rem;                 /* Espaciado entre tarjetas */
+        transition: all 0.3s ease;           /* Transición suave */
+        border: 2px solid #9ab7f5;          /* Borde azul claro (color de core) */
     }
     
+    /* Efecto hover en tarjetas */
     .noticia-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-        border-color: #3b3ef3;
+        transform: translateY(-5px);        /* Elevar ligeramente */
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);  /* Sombra más pronunciada */
+        border-color: #3b3ef3;              /* Cambiar borde a azul botón */
     }
     
     .noticia-imagen {
@@ -157,14 +168,18 @@
     }
 </style>
 
+<!-- Contenedor principal de noticias -->
 <div class="noticias-container">
+    <!-- Header de la sección con título y subtítulo -->
     <div class="noticias-header">
         <h1 class="noticias-titulo-principal">Últimas Noticias</h1>
         <p class="noticias-subtitulo">Mantente al día con nuestras publicaciones</p>
     </div>
     
+    <!-- Loop para mostrar cada noticia de la página actual -->
     {% for n in noticias%}
     <article class="noticia-card">
+        <!-- Mostrar imagen si existe, sino mostrar placeholder -->
         {% if n.imagen %}
             <img src="{{ n.imagen.url }}" alt="{{ n.titulo }}" class="noticia-imagen">
         {% else %}
@@ -173,12 +188,14 @@
             </div>
         {% endif %}
         
+        <!-- Contenido de la noticia -->
         <div class="noticia-content">
             <h2 class="noticia-titulo">{{ n.titulo }}</h2>
             <p class="noticia-detalle">{{ n.detalle }}</p>
         </div>
     </article>
     {% empty %}
+    <!-- Mensaje cuando no hay noticias disponibles -->
     <div class="no-noticias">
         <i class="fas fa-inbox fa-3x mb-3"></i>
         <p>No hay noticias disponibles en este momento.</p>
@@ -191,6 +208,7 @@
 <div class="pagination-container">
     <nav aria-label="Paginación de noticias">
         <ul class="pagination justify-content-center">
+            <!-- Botones de navegación hacia atrás -->
             {% if noticias.has_previous %}
                 <li class="page-item">
                     <a class="page-link" href="?page=1">Primera</a>
@@ -200,18 +218,22 @@
                 </li>
             {% endif %}
 
+            <!-- Números de página (muestra máximo 5 páginas alrededor de la actual) -->
             {% for num in noticias.paginator.page_range %}
                 {% if noticias.number == num %}
+                    <!-- Página actual - destacada -->
                     <li class="page-item active">
                         <span class="page-link">{{ num }}</span>
                     </li>
                 {% elif num > noticias.number|add:'-3' and num < noticias.number|add:'3' %}
+                    <!-- Páginas cercanas a la actual -->
                     <li class="page-item">
                         <a class="page-link" href="?page={{ num }}">{{ num }}</a>
                     </li>
                 {% endif %}
             {% endfor %}
 
+            <!-- Botones de navegación hacia adelante -->
             {% if noticias.has_next %}
                 <li class="page-item">
                     <a class="page-link" href="?page={{ noticias.next_page_number }}">Siguiente</a>
@@ -223,6 +245,7 @@
         </ul>
     </nav>
     
+    <!-- Información sobre la paginación actual -->
     <div class="pagination-info">
         <p>Página {{ noticias.number }} de {{ noticias.paginator.num_pages }} 
         ({{ noticias.paginator.count }} noticias en total)</p>
