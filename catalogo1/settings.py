@@ -126,13 +126,11 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
-USE_TZ = True
+# Configuración de idioma y zona horaria
+LANGUAGE_CODE = 'es-cl'  # Español Chile
+TIME_ZONE = 'America/Santiago'  # Zona horaria de Chile
+USE_I18N = True  # Internacionalización habilitada
+USE_TZ = True  # Usar zona horaria
 
 
 # Static files (CSS, JavaScript, Images)
