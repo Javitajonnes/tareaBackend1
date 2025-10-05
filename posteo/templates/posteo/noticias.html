@@ -1,0 +1,233 @@
+{% extends 'posteo/base.html' %}
+{% load static %}
+{% block bgr %}  
+{% static 'posteo/assets/img/post-bg.jpg' %}
+{% endblock %}
+
+{% block content %}
+<style>
+    /* Estilos consistentes con core/base.html */
+    .noticias-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .noticia-card {
+        background: #fff;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+        transition: all 0.3s ease;
+        border: 2px solid #9ab7f5;
+    }
+    
+    .noticia-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        border-color: #3b3ef3;
+    }
+    
+    .noticia-imagen {
+        width: 100%;
+        height: 350px;
+        object-fit: cover;
+        display: block;
+    }
+    
+    .noticia-content {
+        padding: 2rem;
+    }
+    
+    .noticia-titulo {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #021baa;
+        margin-bottom: 1rem;
+        line-height: 1.3;
+        letter-spacing: -0.3px;
+    }
+    
+    .noticia-detalle {
+        font-family: 'Roboto', sans-serif;
+        font-size: 1.1rem;
+        color: #5E6472;
+        line-height: 1.7;
+        margin-bottom: 0;
+        font-weight: 400;
+    }
+    
+    .noticia-sin-imagen {
+        background: linear-gradient(135deg, #021baa 0%, #3b3ef3 100%);
+        height: 250px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 4rem;
+    }
+    
+    .noticias-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        padding: 20px;
+        background: #e0c362;
+        border-radius: 15px;
+        margin-bottom: 2rem;
+    }
+    
+    .noticias-titulo-principal {
+        font-family: 'Poppins', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #021baa;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.5px;
+    }
+    
+    .noticias-subtitulo {
+        font-family: 'Roboto', sans-serif;
+        font-size: 1.2rem;
+        color: #5E6472;
+        font-weight: 400;
+    }
+    
+    .no-noticias {
+        text-align: center;
+        padding: 3rem;
+        background: #9ab7f5;
+        border-radius: 15px;
+        color: white;
+        font-size: 1.2rem;
+        font-family: 'Roboto', sans-serif;
+    }
+    
+    /* Paginación con colores de core */
+    .pagination-container {
+        margin-top: 3rem;
+        text-align: center;
+    }
+    
+    .pagination .page-link {
+        background: #3b3ef3 !important;
+        color: white !important;
+        border: none !important;
+        margin: 0 2px;
+        border-radius: 25px !important;
+        padding: 8px 16px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .pagination .page-link:hover {
+        background: #5E6472 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .pagination .page-item.active .page-link {
+        background: #021baa !important;
+        border: none !important;
+    }
+    
+    .pagination-info {
+        margin-top: 1rem;
+        color: #5E6472;
+        font-family: 'Roboto', sans-serif;
+    }
+    
+    @media (max-width: 768px) {
+        .noticia-imagen {
+            height: 250px;
+        }
+        
+        .noticia-titulo {
+            font-size: 1.5rem;
+        }
+        
+        .noticia-content {
+            padding: 1.5rem;
+        }
+        
+        .noticias-titulo-principal {
+            font-size: 2rem;
+        }
+    }
+</style>
+
+<div class="noticias-container">
+    <div class="noticias-header">
+        <h1 class="noticias-titulo-principal">Últimas Noticias</h1>
+        <p class="noticias-subtitulo">Mantente al día con nuestras publicaciones</p>
+    </div>
+    
+    {% for n in noticias%}
+    <article class="noticia-card">
+        {% if n.imagen %}
+            <img src="{{ n.imagen.url }}" alt="{{ n.titulo }}" class="noticia-imagen">
+        {% else %}
+            <div class="noticia-sin-imagen">
+                <i class="fas fa-newspaper"></i>
+            </div>
+        {% endif %}
+        
+        <div class="noticia-content">
+            <h2 class="noticia-titulo">{{ n.titulo }}</h2>
+            <p class="noticia-detalle">{{ n.detalle }}</p>
+        </div>
+    </article>
+    {% empty %}
+    <div class="no-noticias">
+        <i class="fas fa-inbox fa-3x mb-3"></i>
+        <p>No hay noticias disponibles en este momento.</p>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Paginación -->
+{% if noticias.has_other_pages %}
+<div class="pagination-container">
+    <nav aria-label="Paginación de noticias">
+        <ul class="pagination justify-content-center">
+            {% if noticias.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">Primera</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ noticias.previous_page_number }}">Anterior</a>
+                </li>
+            {% endif %}
+
+            {% for num in noticias.paginator.page_range %}
+                {% if noticias.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                {% elif num > noticias.number|add:'-3' and num < noticias.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if noticias.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ noticias.next_page_number }}">Siguiente</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ noticias.paginator.num_pages }}">Última</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    
+    <div class="pagination-info">
+        <p>Página {{ noticias.number }} de {{ noticias.paginator.num_pages }} 
+        ({{ noticias.paginator.count }} noticias en total)</p>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
