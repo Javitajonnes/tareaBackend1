@@ -1,0 +1,15 @@
+{% extends 'venta/base.html' %}
+ {% block content %}
+ <h1>{{ctg}}</h1>
+ <hr>
+ {% for n in post %}
+ <p>{{ n.published|date:"SHORT_DATE_FORMAT" }}</p>
+ <p>{{ n.title }}</p>
+ <p>Publicado por: {{ n.author }}</p>
+ <p>Categoria: {{n.categories.all|join:", " }}</p>
+ <hr>
+
+ {% endfor %}
+ 
+ 
+ {% endblock %}

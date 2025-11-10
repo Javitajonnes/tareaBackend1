@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     # Aplicaciones personalizadas del proyecto
     'core',                        # App para páginas estáticas (home, about, etc.)
     'posteo',                      # App para contenido dinámico (noticias, réplicas)
+    'venta',
+
 ]
 
 # =============================================================================

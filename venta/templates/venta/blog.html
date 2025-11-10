@@ -1,0 +1,21 @@
+{% extends 'venta/base.html' %}
+ {% block content %}
+ <hr>
+ {% for n in post %}
+ <p>{{ n.published|date:"SHORT_DATE_FORMAT" }}</p>
+ <p>{{ n.title }}</p>
+ <p>Publicado por: {{ n.author }}</p>
+
+{% for c in n.categories.all  %}
+    <p>
+        <a href="{% url 'category' c.id %}">{{ c.name }}</a>
+    </p>
+{% endfor %}
+
+
+ <hr>
+
+ {% endfor %}
+ 
+ 
+ {% endblock %}
