@@ -30,9 +30,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-c#$^$*&o=lrij(a=^zx!*0wjm%qr0f0@$f)y-n69yc7dx1f4#('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # =============================================================================
@@ -52,8 +52,13 @@ INSTALLED_APPS = [
     # Aplicaciones personalizadas del proyecto
     'core',                        # App para páginas estáticas (home, about, etc.)
     'posteo',                      # App para contenido dinámico (noticias, réplicas)
-    'venta',
-
+    'contact',                     # App para formulario de contacto y soporte de
+    'venta',                       # App para gestión de ventas y productos
+    'redes',                       # App para gestión de enlaces a redes sociales
+    
+    # Librerías de terceros
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
 
 # =============================================================================
@@ -84,6 +89,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'core.context_processors.banner_context',  # Context processor para banners
+                'redes.processors.social_links',  # Context processor para redes sociales
             ],
         },
     },
@@ -153,3 +159,10 @@ MEDIA_ROOT = BASE_DIR / 'media'          # Directorio físico donde se almacenan
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# =============================================================================
+# CONFIGURACIÓN DE CRISPY FORMS
+# =============================================================================
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = ("bootstrap5",)
+CRISPY_TEMPLATE_PACK = "bootstrap5"

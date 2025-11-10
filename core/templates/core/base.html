@@ -231,11 +231,13 @@
         <!-- Navbar global -->
         <div id="navbar">            
             <nav>
-                <a href="/">Inicio</a> |
+                <a href="{% url 'core:home' %}">Inicio</a> |
                 <a href="/noticias/">Noticias</a> |
-                <a href="/about/">Sobre nosotros</a> |
-                <a href="/gallery/">Galería de imágenes</a> |
-                <a href="/faqs/">Preguntas frecuentes</a>
+                <a href="{% url 'venta:blog' %}">Productos</a> |
+                <a href="{% url 'core:about' %}">Sobre nosotros</a> |
+                <a href="{% url 'core:gallery' %}">Galería de imágenes</a> |
+                <a href="{% url 'core:faqs' %}">Preguntas frecuentes</a> |
+                <a href="{% url 'contact' %}">Contacto</a>
             </nav>
         </div>
         
@@ -268,11 +270,17 @@
         <!-- Redes sociales global -->
         <div id="rrss">
             <h3>Síguenos en nuestras redes</h3>
-            <p>
-                <a href="https://facebook.com" target="_blank" style="color: white; margin: 0 10px;">📘 Facebook</a>
-                <a href="https://instagram.com" target="_blank" style="color: white; margin: 0 10px;">📷 Instagram</a>
-                <a href="https://twitter.com" target="_blank" style="color: white; margin: 0 10px;">🐦 Twitter</a>
-            </p>
+            {% if footer_social_links %}
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    {% for link in footer_social_links %}
+                        <a href="{{ link.url }}" target="_blank" rel="noopener" class="text-white fw-semibold text-decoration-none">
+                            {{ link.name }}
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-white-50">Muy pronto estaremos compartiendo nuestras redes sociales.</p>
+            {% endif %}
         </div>
     </div>
 

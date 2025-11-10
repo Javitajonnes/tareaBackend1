@@ -1,0 +1,38 @@
+{% extends 'contact/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block contact_content %}
+<div class="contact-wrapper">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+                <div class="card shadow border-0">
+                    <div class="card-body p-4 p-md-5">
+                        <h2 class="fw-bold text-primary mb-3">Hablemos</h2>
+                        <p class="text-muted mb-4">
+                            ¿Tienes dudas sobre torneos, coleccionismo o tecnología lúdica?
+                            Escríbenos y el equipo de Blogfiction te responderá a la brevedad.
+                        </p>
+
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-success" role="alert">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <div class="mt-3 text-end">
+                                <button type="submit" class="btn btn-primary px-4">Enviar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

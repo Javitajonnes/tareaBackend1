@@ -32,7 +32,7 @@
         <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
             <div class="container px-4 px-lg-5">
                 <!-- Logo/Brand que lleva a la página principal -->
-                <a class="navbar-brand" href="{% url 'home' %}">Blogfiction.cl</a>
+                <a class="navbar-brand" href="{% url 'core:home' %}">Blogfiction.cl</a>
                 
                 <!-- Botón para menú móvil -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,19 +45,25 @@
                     <ul class="navbar-nav ms-auto py-4 py-lg-0">
                         <!-- Enlaces usando URLs dinámicas de Django -->
                         <li class="nav-item">
-                            <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'home' %}">Inicio</a>
+                            <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'core:home' %}">Inicio</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'noticias' %}">Noticias</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'about' %}">Sobre Nosotros</a>
+                            <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'venta:blog' %}">Blog de productos</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'gallery' %}">Galería</a>
+                            <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'core:about' %}">Sobre Nosotros</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'faqs' %}">FAQs</a>
+                            <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'core:gallery' %}">Galería</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'core:faqs' %}">FAQs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'venta:blog' %}">Blog de Productos</a>
                         </li>
                     </ul>
                 </div>

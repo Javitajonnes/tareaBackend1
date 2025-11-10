@@ -1,15 +1,34 @@
 {% extends 'venta/base.html' %}
- {% block content %}
- <h1>{{ctg}}</h1>
- <hr>
- {% for n in post %}
- <p>{{ n.published|date:"SHORT_DATE_FORMAT" }}</p>
- <p>{{ n.title }}</p>
- <p>Publicado por: {{ n.author }}</p>
- <p>Categoria: {{n.categories.all|join:", " }}</p>
- <hr>
 
- {% endfor %}
- 
- 
- {% endblock %}
+{% block venta_content %}
+<h2 class="mb-4 text-primary">Categoría: {{ ctg.name }}</h2>
+
+<div class="row g-4">
+    {% for n in post %}
+    <div class="col-12 col-lg-6">
+        <article class="card h-100 shadow-sm border-0">
+            {% if n.image %}
+            <img src="{{ n.image.url }}" class="card-img-top" alt="{{ n.title }}">
+            {% endif %}
+            <div class="card-body">
+                <span class="badge bg-primary-subtle text-primary mb-2">{{ n.published|date:"d M Y" }}</span>
+                <h3 class="h5 fw-bold text-primary">{{ n.title }}</h3>
+                <p class="text-muted small mb-3">Publicado por {{ n.author.get_full_name|default:n.author.username }}</p>
+                <p class="text-muted">{{ n.detail|truncatewords:30 }}</p>
+                <div>
+                    {% for c in n.categories.all %}
+                        <span class="badge bg-light text-dark border border-primary me-1">{{ c.name }}</span>
+                    {% empty %}
+                        <span class="text-muted">Sin categoría</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </article>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-warning">No se encontraron publicaciones para esta categoría.</div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

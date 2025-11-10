@@ -11,3 +11,7 @@ def faqs(request):
 
 def gallery(request):
     return render(request,"core/gallery.html")
+
+
+def error_404(request, exception):
+    return render(request, "core/404.html", status=404)

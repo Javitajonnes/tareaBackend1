@@ -22,22 +22,21 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from core import views
-
 # Lista principal de patrones de URL del proyecto
 urlpatterns = [    
     # Rutas de la aplicación core (páginas estáticas)
-    path('', views.home, name='home'),                    # Página principal
-    path('gallery/', views.gallery, name='gallery'),     # Galería de imágenes
-    path('faqs/', views.faqs, name='faqs'),             # Preguntas frecuentes
-    path('about/', views.about, name='about'),           # Sobre nosotros
+    path('', include('core.urls')),
     
     # Rutas de la aplicación posteo (contenido dinámico)
     # Incluye todas las URLs definidas en posteo/urls.py
     path('noticias/', include('posteo.urls')),
     
     # Panel de administración de Django
+    
     path('admin/', admin.site.urls),
+    path('contact/',include('contact.urls')),
+    path('venta/', include('venta.urls')),
+    path('redes/', include('redes.urls')),
 ]
 
 # Configuración para servir archivos media en modo desarrollo
@@ -45,3 +44,5 @@ urlpatterns = [
 # En producción, los archivos media deben servirse por el servidor web
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler404 = 'core.views.error_404'

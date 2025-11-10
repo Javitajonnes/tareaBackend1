@@ -1,0 +1,23 @@
+{% extends 'core/base.html' %}
+
+{% block page_title %}Página no encontrada{% endblock %}
+{% block page_subtitle %}Parece que el portal que buscas está en otra dimensión lúdica{% endblock %}
+
+{% block content %}
+<div class="py-5">
+    <div class="card shadow border-0">
+        <div class="card-body p-5 text-center">
+            <h1 class="display-4 fw-bold text-primary">404</h1>
+            <p class="lead text-muted mb-4">
+                La página que intentas visitar no existe o fue movida. Pero tenemos muchos mundos por explorar:
+            </p>
+            <div class="d-flex flex-column flex-md-row justify-content-center gap-3">
+                <a href="{% url 'core:home' %}" class="btn btn-primary px-4">Ir al inicio</a>
+                <a href="{% url 'noticias' %}" class="btn btn-outline-primary px-4">Explorar noticias</a>
+                <a href="{% url 'contact' %}" class="btn btn-outline-secondary px-4">Contactar al equipo</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

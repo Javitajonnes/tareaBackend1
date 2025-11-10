@@ -9,9 +9,11 @@ Autor: Equipo Blogfiction
 Fecha: 2025
 """
 
+from django.db.models import Q
 from django.shortcuts import render
 from django.core.paginator import Paginator
-from .models import Noticia
+
+from .models import Autor, Categoria, Etiqueta, Noticia
 
 
 def noticias(request):
@@ -47,9 +49,37 @@ def noticias(request):
         'noticias/' -> Esta vista se accede desde la URL raíz de noticias
     """
     
-    # Obtener todas las noticias ordenadas por fecha de creación descendente
-    # Esto asegura que las noticias más recientes aparezcan primero
-    noticias_list = Noticia.objects.all().order_by('-created')
+    # Obtener parámetros de filtro desde query params
+    categoria_slug = request.GET.get('categoria')
+    autor_slug = request.GET.get('autor')
+    etiqueta_slug = request.GET.get('etiqueta')
+    buscar = request.GET.get('q')
+    orden = request.GET.get('orden', '-created')
+
+    # Base queryset
+    noticias_list = (
+        Noticia.objects.select_related('categoria', 'autor')
+        .prefetch_related('etiquetas')
+        .order_by(orden)
+    )
+
+    # Aplicar filtros
+    if categoria_slug:
+        noticias_list = noticias_list.filter(categoria__slug=categoria_slug)
+    if autor_slug:
+        noticias_list = noticias_list.filter(autor__slug=autor_slug)
+    if etiqueta_slug:
+        noticias_list = noticias_list.filter(etiquetas__slug=etiqueta_slug)
+    if buscar:
+        noticias_list = noticias_list.filter(
+            Q(titulo__icontains=buscar) |
+            Q(detalle__icontains=buscar)
+        ).distinct()
+
+    query_params = request.GET.copy()
+    if 'page' in query_params:
+        query_params.pop('page')
+    query_string = query_params.urlencode()
     
     # Configurar paginación: 5 noticias por página
     # La paginación mejora el rendimiento al cargar solo los registros necesarios
@@ -63,6 +93,21 @@ def noticias(request):
     # get_page() maneja automáticamente páginas inválidas devolviendo la última página
     noticias = paginator.get_page(page_number)
     
-    # Renderizar el template con el contexto de noticias paginadas
-    # El contexto incluye el objeto Page con métodos para navegación
-    return render(request, 'posteo/noticias.html', {'noticias': noticias})
+    filtros_contexto = {
+        'categorias': Categoria.objects.all().order_by('nombre'),
+        'autores': Autor.objects.all().order_by('nombre'),
+        'etiquetas': Etiqueta.objects.all().order_by('nombre'),
+        'filtro_categoria': categoria_slug,
+        'filtro_autor': autor_slug,
+        'filtro_etiqueta': etiqueta_slug,
+        'filtro_buscar': buscar or '',
+        'orden_actual': orden,
+        'query_string': query_string,
+    }
+
+    contexto = {
+        'noticias': noticias,
+        **filtros_contexto
+    }
+
+    return render(request, 'posteo/noticias.html', contexto)

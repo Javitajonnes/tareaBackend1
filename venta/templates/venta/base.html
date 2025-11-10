@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Las mejores reseñas</h1>
-    {% block content %}{% endblock %}
-</body>
-</html>
+{% extends 'core/base.html' %}
+
+{% block page_title %}Blog de productos{% endblock %}
+{% block page_subtitle %}Reseñas, lanzamientos y productos destacados para tu colección{% endblock %}
+
+{% block content %}
+    {% block venta_content %}{% endblock %}
+{% endblock %}

@@ -94,7 +94,7 @@ body {
 }
 
 /* Contenido principal */
-#main-content {
+#contest {
     background-color: white;
     grid-row: 3;
     grid-column: 2;
@@ -120,6 +120,29 @@ body {
     color: white;
 }
 
+/* Redes sociales (footer) */
+#rrss {
+    background-color: var(--dark-blue);
+    grid-row: 5;
+    grid-column: 1 / 4;
+    padding: 20px;
+    text-align: center;
+    color: white;
+}
+
+#rrss a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+    font-weight: 600;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+#rrss a:hover {
+    color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .layout-grid {
@@ -134,4 +157,22 @@ body {
     #ads1, #main-content, #ads2 {
         grid-column: 1;
     }
+}
+
+/* Contact page specific adjustments */
+.contact-wrapper {
+    background: linear-gradient(135deg, rgba(2, 27, 170, 0.08), rgba(224, 195, 98, 0.08));
+}
+
+.venta-card {
+    background: #fff;
+    border-radius: 18px;
+    border: 2px solid rgba(155, 183, 245, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.venta-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 35px rgba(2, 27, 170, 0.18);
+    border-color: rgba(59, 62, 243, 0.5);
 }
