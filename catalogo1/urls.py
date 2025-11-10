@@ -45,4 +45,5 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+# Handler de error 404 personalizado (DEBUG debe estar en False para visualizarlo).
 handler404 = 'core.views.error_404'

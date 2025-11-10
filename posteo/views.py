@@ -49,21 +49,21 @@ def noticias(request):
         'noticias/' -> Esta vista se accede desde la URL raíz de noticias
     """
     
-    # Obtener parámetros de filtro desde query params
+    # Leer parámetros de filtro enviados por querystring (?categoria=...&autor=...)
     categoria_slug = request.GET.get('categoria')
     autor_slug = request.GET.get('autor')
     etiqueta_slug = request.GET.get('etiqueta')
     buscar = request.GET.get('q')
     orden = request.GET.get('orden', '-created')
 
-    # Base queryset
+    # Base queryset con relaciones precargadas para evitar consultas extra
     noticias_list = (
         Noticia.objects.select_related('categoria', 'autor')
         .prefetch_related('etiquetas')
         .order_by(orden)
     )
 
-    # Aplicar filtros
+    # Filtros dinámicos según los parámetros disponibles
     if categoria_slug:
         noticias_list = noticias_list.filter(categoria__slug=categoria_slug)
     if autor_slug:
@@ -76,6 +76,7 @@ def noticias(request):
             Q(detalle__icontains=buscar)
         ).distinct()
 
+    # Guardamos los filtros usados para poder reconstruirlos en el template.
     query_params = request.GET.copy()
     if 'page' in query_params:
         query_params.pop('page')
@@ -106,7 +107,7 @@ def noticias(request):
     }
 
     contexto = {
-        'noticias': noticias,
+        'noticias': noticias,  # objeto Page de Django con la lista paginada
         **filtros_contexto
     }
 

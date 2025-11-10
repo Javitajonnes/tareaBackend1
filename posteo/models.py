@@ -20,6 +20,7 @@ class Categoria(models.Model):
         return self.nombre
 
     def save(self, *args, **kwargs):
+        # Autogeneramos el slug a partir del nombre si no se ha definido.
         if not self.slug:
             self.slug = slugify(self.nombre)
         super().save(*args, **kwargs)
@@ -35,6 +36,7 @@ class Noticia(models.Model):
         related_name="noticias",
         verbose_name="Categoría",
     )
+    # Autor opcional. Si se elimina, se mantiene la noticia sin autor asignado.
     autor = models.ForeignKey(
         'Autor',
         on_delete=models.SET_NULL,
@@ -43,6 +45,7 @@ class Noticia(models.Model):
         related_name="noticias",
         verbose_name="Autor",
     )
+    # Las etiquetas permiten clasificar la noticia en múltiples temas.
     etiquetas = models.ManyToManyField(
         'Etiqueta',
         blank=True,
@@ -120,6 +123,7 @@ class Autor(models.Model):
         return self.nombre
 
     def save(self, *args, **kwargs):
+        # Generamos el slug automáticamente para usarlo en URLs y filtros.
         if not self.slug:
             self.slug = slugify(self.nombre)
         super().save(*args, **kwargs)
@@ -141,6 +145,7 @@ class Etiqueta(models.Model):
         return self.nombre
 
     def save(self, *args, **kwargs):
+        # Garantiza un slug limpio basado en el nombre de la etiqueta.
         if not self.slug:
             self.slug = slugify(self.nombre)
         super().save(*args, **kwargs)

@@ -25,6 +25,8 @@ class ContactForm(forms.Form):
         self.helper.form_method = "post"
         self.helper.form_id = "contact-form"
         self.helper.attrs = {"novalidate": True}
+        # Definimos el layout usando clases de Bootstrap para mantener
+        # el estilo consistente con el resto del sitio.
         self.helper.layout = Layout(
             Row(
                 Column(Field("name"), css_class="col-12 col-md-6 mb-3"),

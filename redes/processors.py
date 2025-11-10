@@ -8,5 +8,5 @@ def social_links(request):
     """
     links = LinkRed.objects.filter(url__isnull=False).order_by('name')
     return {
-        "footer_social_links": links,
+        "footer_social_links": links,  # variable disponible en todos los templates
     }

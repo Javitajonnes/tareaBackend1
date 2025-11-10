@@ -14,4 +14,5 @@ def gallery(request):
 
 
 def error_404(request, exception):
+    # Renderizamos la plantilla personalizada manteniendo el layout principal.
     return render(request, "core/404.html", status=404)

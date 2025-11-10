@@ -1,57 +1,130 @@
-Plantilla proyecto para evaluaciones Backend
-============================================
+Blogfiction Backend – Documentación general
+===========================================
 
-- Ev1: listo  
-- Ev2: en proceso  
-- Ev3: pendiente  
-- Ev4: pendiente  
+Este proyecto es la base backend de **Blogfiction.cl**, un sitio centrado en noticias, catálogo de productos y recursos para el mundo de los juegos de mesa, el coleccionismo y la tecnología lúdica.  
+Incluye autenticación de administración, formularios con estilo, filtros de datos y páginas coherentes a nivel visual.
 
-## Formularios y contacto
+---
 
-- La app `contact` implementa el formulario de contacto utilizando **django-crispy-forms** y **crispy-bootstrap5**.
-- Para que el estilo se renderice correctamente se agregaron los paquetes a `INSTALLED_APPS` y se configuraron las constantes `CRISPY_ALLOWED_TEMPLATE_PACKS` y `CRISPY_TEMPLATE_PACK` (ver `catalogo1/settings.py`).
-- El formulario (`ContactForm`) define su `FormHelper` en `contact/forms.py`, lo que permite utilizar `{{ form|crispy }}` dentro del template `contact/contacto.html`.
-- La vista `contact` muestra mensajes de éxito mediante el framework de mensajes de Django y redirige a la misma URL tras un POST válido.
+## Arquitectura general
 
-## Enlaces a redes sociales
+### Apps y responsabilidades
+| App | Rol | URLs públicas | Comentarios |
+|-----|-----|---------------|-------------|
+| `core` | Layout principal y páginas estáticas (home, about, gallery, faqs) | `/`, `/about/`, `/gallery/`, `/faqs/` | Define el template base y maneja banners dinámicos. |
+| `posteo` | Noticias y contenido editorial | `/noticias/` | Gestiona noticias, categorías, autores, etiquetas y comentarios. |
+| `contact` | Formulario de contacto | `/contact/` | Usa django-crispy-forms + bootstrap5. |
+| `redes` | Enlaces a redes sociales | `/redes/` | Modelo `LinkRed`; también alimenta el footer vía context processor. |
+| `venta` | Blog / catálogo de productos | `/venta/`, `/venta/categoria/<id>/` | Muestra productos y categorías con el mismo estilo del sitio. |
 
-- La app `redes` expone el modelo `LinkRed`, donde se almacenan los enlaces a redes sociales.
-- Se creó un context processor (`redes.processors.social_links`) que consulta estos enlaces y los pone a disposición de los templates a través de la variable `footer_social_links`.
-- El contexto se registra en `catalogo1/settings.py` dentro del arreglo `TEMPLATES[0]['OPTIONS']['context_processors']`.
-- El template base `core/templates/core/base.html` consume la variable `footer_social_links` para renderizar los enlaces dinámicamente en el footer.
+Cada app expone su propio `urls.py`, incluido desde `catalogo1/urls.py`, lo que mantiene las responsabilidades separadas y facilita el mantenimiento.
 
-## Filtros en noticias
+### Flujo de datos
+1. El usuario navega por las rutas del proyecto.  
+2. Cada app atiende la solicitud a través de sus vistas (por ejemplo `posteo.views.noticias`) y prepara el contexto.  
+3. El template base de `core` renderiza el layout común (banner, navbar, footer).  
+4. Los context processors (`core.banner_context`, `redes.social_links`) inyectan datos globales como la imagen del banner y los links sociales.  
+5. Los formularios (como el de contacto) se procesan en sus views, usando crispy-forms para el renderizado.  
 
-- La vista `posteo.views.noticias` acepta parámetros por query string para filtrar los resultados:
+---
 
-  | Parámetro   | Descripción                                |
-  |-------------|--------------------------------------------|
-  | `categoria` | Slug de `Categoria` (ForeignKey)           |
-  | `autor`     | Slug de `Autor` (ForeignKey)               |
-  | `etiqueta`  | Slug de `Etiqueta` (ManyToMany)            |
-  | `q`         | Búsqueda en título y detalle de la noticia |
-  | `orden`     | Campo de ordenamiento (`-created`, etc.)   |
+## Modelos destacados
 
-- El template `posteo/templates/posteo/noticias.html` renderiza un formulario que permite aplicar estos filtros.
-- Se preservan los filtros al paginar gracias al parámetro `query_string` pasado desde la vista.
+### Posteo
+- `Categoria` → `Noticia` → `Comentario`: cadena de relaciones principal.  
+- `Autor`: enlazado a `Noticia` via `ForeignKey`.  
+- `Etiqueta`: relación `ManyToMany` con `Noticia`.  
+Estos modelos permiten filtrar noticias por categoría, autor y etiqueta, y administrar comentarios desde el panel.
 
-## Estructura de URLs por app
+### Redes
+- `LinkRed`: slug, nombre, URL, timestamps. Se consume en la vista pública y en el footer.
 
-- `core/urls.py`: páginas estáticas (`/`, `/about/`, `/gallery/`, `/faqs/`).
-- `posteo/urls.py`: noticias paginadas y filtradas (`/noticias/`).
-- `contact/urls.py`: formulario de contacto con crispy (`/contact/`).
-- `redes/urls.py`: listado público de enlaces sociales (`/redes/`).
-- `venta/urls.py`: blog/catalogo de productos (`/venta/`, `/venta/categoria/<id>/`).
+### Venta
+- `Category` y `PostProduct`: catálogo/blog de productos relacionados con el hobby.  
+`PostProduct` usa `ManyToMany` con categorías y `ForeignKey` a usuarios.
 
-Cada archivo de rutas se incluye en `catalogo1/urls.py`, manteniendo la responsabilidad de cada app separada.
+---
 
-## Página 404 personalizada
+## Administración personalizada
 
-- Se creó el template `core/templates/core/404.html` que extiende el layout principal y ofrece opciones para volver al inicio, noticias o contacto.
-- El handler se registra en `catalogo1/urls.py` mediante `handler404 = 'core.views.error_404'`.
-- La vista `error_404` vive en `core/views.py` y devuelve la respuesta con `status=404`.
+En `posteo/admin.py` se personalizó el panel para `Categoria`, `Noticia`, `Comentario`, `Autor`, `Etiqueta` y `Replica`.  
+Se configuraron `list_display`, `list_filter`, `search_fields`, `ordering`, `readonly_fields`, `fieldsets`, `autocomplete_fields` y `list_editable`. Esto permite a los administradores gestionar el contenido con eficiencia.
 
-## Estilos coherentes
+---
 
-- Las apps `posteo`, `venta` y `contact` comparten la base visual (`core/base.html`) para mantener tipografías, colores y layout consistentes.
-- Se añadieron estilos específicos en `core/static/core/css/styles.css` para armonizar tarjetas, filtros y formularios.
+## Context processors
+
+| Context processor | Ubicación | Propósito |
+|-------------------|-----------|-----------|
+| `core.banner_context` | `core/context_processors.py` | Selecciona la imagen de banner según la ruta actual. |
+| `redes.social_links` | `redes/processors.py` | Entrega los enlaces a redes sociales para el footer y la vista pública. |
+
+Ambos se registran en `TEMPLATES[0]['OPTIONS']['context_processors']` dentro de `catalogo1/settings.py`.
+
+---
+
+## Formularios
+
+- La app `contact` utiliza **django-crispy-forms** + **crispy-bootstrap5**.  
+- `ContactForm` define un `FormHelper` con layout responsive en `contact/forms.py`.  
+- La vista `contact` (`contact/views.py`) gestiona el POST, muestra mensajes de éxito y redirige.  
+- El template `contact/contacto.html` renderiza el formulario con `{{ form|crispy }}` y un CTA propio.
+
+---
+
+## Noticias y filtros
+
+- La vista `posteo.views.noticias` admite filtros via query string:
+
+  | Parámetro | Descripción |
+  |-----------|-------------|
+  | `categoria` | slug de `Categoria` |
+  | `autor` | slug de `Autor` |
+  | `etiqueta` | slug de `Etiqueta` |
+  | `q` | búsqueda en título/detalle |
+  | `orden` | ordenamiento (`-created`, `created`, `titulo`, `-titulo`) |
+
+- El template `posteo/noticias.html` genera un formulario con selects y campo de búsqueda.  
+- La paginación preserva los filtros agregando el querystring actual a los links de página.
+
+---
+
+## Estilos y assets
+
+- `core/base.html` define el grid principal (banner, navbar, sidebars, footer).  
+- `core/static/core/css/styles.css` contiene la paleta, tipografías y elementos compartidos.  
+- Las apps `posteo`, `venta` y `contact` extienden ese layout y agregan clases propias (`.venta-card`, `.filtros-container`, etc.).  
+- Archivos estáticos específicos de cada app se encuentran en `app/static/app/...`.
+
+---
+
+## Manejo de errores
+
+- Plantilla custom: `core/templates/core/404.html`.  
+- Vista: `core.views.error_404`.  
+- Handler registrado en `catalogo1/urls.py` (`handler404 = 'core.views.error_404'`).  
+- Al poner `DEBUG=False` o ejecutar tests con `override_settings(DEBUG=False)` se muestra el diseño personalizado.
+
+---
+
+## Rutas principales
+
+- `/` → Home (`core`)  
+- `/noticias/` → Listado filtrable de noticias (`posteo`)  
+- `/contact/` → Formulario de contacto (`contact`)  
+- `/redes/` → Listado de enlaces sociales (`redes`)  
+- `/venta/` y `/venta/categoria/<id>/` → Blog/catalogo de productos (`venta`)  
+- `/admin/` → Panel de administración (usuario `root` / `root123`)  
+
+---
+
+## Requisitos cumplidos
+
+1. **Modelos relacionados**: `Categoria → Noticia → Comentario` + `Autor` y `Etiqueta`.  
+2. **Admin personalizado**: panel extendido con múltiples configuraciones.  
+3. **404 custom**: template, vista y handler configurados.  
+4. **Filtros**: query params en noticias (categoría/autor/etiqueta/búsqueda/orden).  
+5. **Context processors**: banners y enlaces sociales dinámicos.  
+6. **Formulario con crispy**: app `contact`.  
+7. **Apps coherentes**: cada app con responsabilidad clara.  
+8. **URLs por app**: `core`, `posteo`, `contact`, `redes`, `venta` expuestas y enlazadas en el router principal.

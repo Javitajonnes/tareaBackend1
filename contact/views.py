@@ -13,6 +13,7 @@ def contact(request):
     if request.method == "POST":
         form = ContactForm(data=request.POST)
         if form.is_valid():
+            # En esta versión no enviamos correo: solo mostramos mensaje de éxito.
             messages.success(
                 request,
                 "¡Gracias por escribirnos! Te contactaremos a la brevedad.",
@@ -25,6 +26,6 @@ def contact(request):
         request,
         "contact/contacto.html",
         {
-            "form": form,
+            "form": form,  # formulario renderizado con crispy
         },
     )
