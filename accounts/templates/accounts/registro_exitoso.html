@@ -1,0 +1,34 @@
+{% extends 'accounts/base.html' %}
+
+{% block accounts_content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="card shadow border-0">
+                <div class="card-body p-4 p-md-5 text-center">
+                    <div class="mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-check-circle text-success" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 2.604 6.3a.75.75 0 0 0-1.208.896l4.5 3.5a.75.75 0 0 0 1.208-.096l3.5-4.5a.75.75 0 0 0-.137-1.03z"/>
+                        </svg>
+                    </div>
+                    <h2 class="fw-bold text-success mb-3">¡Registro Exitoso!</h2>
+                    <p class="text-muted mb-4">
+                        Tu cuenta ha sido creada correctamente. 
+                        Ya puedes acceder al panel de administración.
+                    </p>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'admin:login' %}" class="btn btn-primary">
+                            Ir al Panel de Administración
+                        </a>
+                        <a href="{% url 'core:home' %}" class="btn btn-outline-secondary">
+                            Volver al Inicio
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

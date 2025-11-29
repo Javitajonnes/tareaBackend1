@@ -18,6 +18,7 @@ Incluye autenticación de administración, formularios con estilo, filtros de da
 | `venta` | Blog / catálogo de productos | `/venta/`, `/venta/categoria/<id>/` | Muestra productos y categorías con el mismo estilo del sitio. |
 | `miapi` | API REST para productos | `/todos/api/productos/` | API con métodos GET y POST sin autorización que consume productos de la app `venta`. |
 | `apiconsumo` | Consumo de API desde la web | `/api-consumo/productos/` | App especializada que consume la API de productos y muestra los datos en la aplicación web. |
+| `accounts` | Sistema de registro de usuarios | `/accounts/` | Formularios de registro para Editores y Moderadores con asignación automática de grupos y permisos. |
 
 Cada app expone su propio `urls.py`, incluido desde `catalogo1/urls.py`, lo que mantiene las responsabilidades separadas y facilita el mantenimiento.
 
@@ -225,6 +226,22 @@ La vista consume la API localmente usando `urllib` y renderiza los productos en 
 
 ---
 
+## Usuarios de prueba
+
+El sistema incluye los siguientes usuarios de prueba para diferentes roles:
+
+| Usuario | Email | Contraseña | Grupo | Staff | Acceso Admin |
+|---------|-------|------------|-------|-------|--------------|
+| `root` | admin@blogfiction.cl | `root123` | - | ✅ | ✅ |
+| `editor1` | editor@example.com | `root123` | - | ✅ | ❌ |
+| `editor2` | editor2@gmail.com | `root1234` | Editores | ❌ | ✅ |
+| `moderador1` | moderador@example.com | `root123` | - | ✅ | ❌ |
+| `moderador2` | mod2@gmail.com | `root1234` | Moderadores | ❌ | ✅ |
+
+**Nota:** Los usuarios pueden registrarse como Editores o Moderadores a través del sistema de registro en `/accounts/`. Los usuarios registrados automáticamente obtienen `is_staff = True` para acceder al panel de administración.
+
+---
+
 ## Rutas principales
 
 - `/` → Home (`core`)  
@@ -232,6 +249,11 @@ La vista consume la API localmente usando `urllib` y renderiza los productos en 
 - `/contact/` → Formulario de contacto (`contact`)  
 - `/redes/` → Listado de enlaces sociales (`redes`)  
 - `/venta/` y `/venta/categoria/<id>/` → Blog/catalogo de productos (`venta`)  
+- `/accounts/` → Sistema de registro de usuarios (`accounts`)
+  - `/accounts/` → Selección de tipo de registro (Editor o Moderador)
+  - `/accounts/editor/` → Formulario de registro como Editor
+  - `/accounts/moderador/` → Formulario de registro como Moderador
+  - `/accounts/exitoso/` → Página de confirmación de registro
 - `/todos/api/productos/` → API REST para productos - GET (listar) y POST (crear) sin autorización (`miapi`)  
 La API consume el modelo `PostProduct` de la app `venta`. Cuando se accede desde el navegador muestra un formulario HTML para crear productos.  
 - `/api-consumo/productos/` → Vista web que consume la API de productos (`apiconsumo`)  
@@ -276,21 +298,38 @@ La API consume el modelo `PostProduct` de la app `venta`. Cuando se accede desde
    - Estado: Funcionando correctamente
 
 7. ✅ **Apps coherentes**: cada app con responsabilidad clara.  
-   - Apps: `core`, `posteo`, `contact`, `redes`, `venta`, `miapi`, `apiconsumo`
+   - Apps: `core`, `posteo`, `contact`, `redes`, `venta`, `miapi`, `apiconsumo`, `accounts`
    - Cada app tiene su propio `urls.py` y responsabilidad específica
    - Estado: Funcionando correctamente
 
-8. ✅ **URLs por app**: `core`, `posteo`, `contact`, `redes`, `venta`, `miapi`, `apiconsumo` expuestas y enlazadas en el router principal.  
+8. ✅ **URLs por app**: `core`, `posteo`, `contact`, `redes`, `venta`, `miapi`, `apiconsumo`, `accounts` expuestas y enlazadas en el router principal.  
    - Ubicación: `catalogo1/urls.py`
    - Estado: Funcionando correctamente
 
 ### Requisitos de grupos y usuarios
 
-9. ⚠️ **Grupos y usuarios**: sistema de registro con dos grupos (Editores y Moderadores) con diferentes permisos sobre modelos.  
-   - **Nota**: La app `accounts` fue creada pero actualmente no está en `INSTALLED_APPS`. Los grupos "Editores" y "Moderadores" existen en la base de datos (creados por migración `0004_crear_grupos_permisos.py`).
-   - Grupos creados: "Editores" (permisos sobre `Noticia`) y "Moderadores" (permisos sobre `Comentario`)
-   - Migración: `posteo/migrations/0004_crear_grupos_permisos.py`
-   - Estado: Grupos y permisos configurados, pero formularios de registro no activos (app `accounts` no en INSTALLED_APPS)
+9. ✅ **Grupos y usuarios**: sistema de registro con dos grupos (Editores y Moderadores) con diferentes permisos sobre modelos.  
+   - **Grupos creados en BD:** ✅
+     - "Editores" (3 permisos: `add_noticia`, `change_noticia`, `view_noticia`)
+     - "Moderadores" (3 permisos: `change_comentario`, `delete_comentario`, `view_comentario`)
+   - **Migración:** `posteo/migrations/0004_crear_grupos_permisos.py` ✅
+   - **App `accounts`:** ✅ Agregada a `INSTALLED_APPS` y completamente funcional
+   - **Formularios de registro:** ✅ Implementados y accesibles
+     - `RegistroEditorForm`: Registro para usuarios del grupo Editores
+     - `RegistroModeradorForm`: Registro para usuarios del grupo Moderadores
+   - **Vistas:** ✅ Implementadas en `accounts/views.py`
+     - `seleccionar_tipo_registro`: Selección de tipo de cuenta
+     - `registro_editor`: Procesamiento de registro como Editor
+     - `registro_moderador`: Procesamiento de registro como Moderador
+     - `registro_exitoso`: Página de confirmación
+   - **URLs:** ✅ Configuradas en `accounts/urls.py` e incluidas en `catalogo1/urls.py`
+   - **Funcionalidad:**
+     - Crea grupos automáticamente si no existen
+     - Asigna permisos correctamente a cada grupo
+     - Asigna usuarios a sus respectivos grupos
+     - Permite acceso al panel de Django (`is_staff = True`)
+   - **Templates:** ✅ Templates con Bootstrap y crispy-forms
+   - **Estado:** ✅ Funcionando correctamente y probado
 
 ### Requisitos de comunicación
 

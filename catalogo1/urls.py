@@ -40,6 +40,7 @@ urlpatterns = [
     path('venta/', include('venta.urls')),
     path('redes/', include('redes.urls')),
     path('api-consumo/', include('apiconsumo.urls')),
+    path('accounts/', include('accounts.urls')),
     path('send-email/', views.send_example_email, name='send_example_email'),
     path('todos/', include(todo_urls))
 ]

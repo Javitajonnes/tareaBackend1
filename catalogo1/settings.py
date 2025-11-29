@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'miapi',                       # App para API de juegos (GET y POST)
     'apiconsumo',                  # App especializada para consumir la API desde la web
     'rest_framework',              # Framework para construir APIs RESTful
+    'accounts',                    # App para gestión de cuentas de usuario
     
     # Librerías de terceros
     'crispy_forms',
