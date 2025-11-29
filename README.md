@@ -6,6 +6,159 @@ Incluye autenticación de administración, formularios con estilo, filtros de da
 
 ---
 
+## Instalación y configuración
+
+### Requisitos previos
+
+- Python 3.8 o superior
+- pip (gestor de paquetes de Python)
+- Git (opcional, para clonar el repositorio)
+
+### Instalación de dependencias
+
+1. **Crear un entorno virtual (recomendado):**
+
+```bash
+# Windows
+python -m venv venv
+venv\Scripts\activate
+
+# Linux/Mac
+python3 -m venv venv
+source venv/bin/activate
+```
+
+2. **Instalar las dependencias del proyecto:**
+
+**Opción A: Instalar desde requirements.txt (recomendado):**
+
+```bash
+pip install -r requirements.txt
+```
+
+**Opción B: Instalar manualmente:**
+
+```bash
+pip install django==5.2.5
+pip install pillow
+pip install django-crispy-forms
+pip install crispy-bootstrap5
+pip install djangorestframework
+```
+
+### Dependencias del proyecto
+
+El proyecto utiliza las siguientes librerías principales:
+
+| Librería | Versión | Propósito |
+|----------|---------|-----------|
+| Django | 5.2.5 | Framework web principal |
+| Pillow | >=10.0.0 | Procesamiento de imágenes (requerido para ImageField) |
+| django-crispy-forms | Latest | Renderizado de formularios con Bootstrap |
+| crispy-bootstrap5 | Latest | Integración con Bootstrap 5 |
+| djangorestframework | Latest | Framework para construir APIs REST |
+
+**Nota:** Las versiones "Latest" se refieren a las últimas versiones estables disponibles en PyPI al momento de la instalación.
+
+### Configuración de la base de datos
+
+1. **Aplicar migraciones:**
+
+```bash
+python manage.py migrate
+```
+
+2. **Crear un superusuario (opcional):**
+
+```bash
+python manage.py createsuperuser
+```
+
+3. **Cargar datos iniciales (si existen fixtures):**
+
+```bash
+python manage.py loaddata fixtures/initial_data.json
+```
+
+### Configuración de Mailtrap
+
+El proyecto utiliza **Mailtrap** para el envío de emails en desarrollo. La configuración se encuentra en `catalogo1/settings.py`.
+
+#### Datos de configuración actuales:
+
+```python
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+EMAIL_HOST_USER = '712a902e021eb5'
+EMAIL_HOST_PASSWORD = '6fcb32b0a4fb55'
+EMAIL_PORT = 2525
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+DEFAULT_FROM_EMAIL = 'noreply@blogfiction.cl'
+```
+
+#### Para configurar tu propia cuenta de Mailtrap:
+
+1. **Crear una cuenta en Mailtrap:**
+   - Visita [https://mailtrap.io/](https://mailtrap.io/)
+   - Crea una cuenta gratuita o inicia sesión
+
+2. **Obtener credenciales SMTP:**
+   - Ve a tu cuenta de Mailtrap
+   - Navega a "Email Testing" → "Inboxes" → "SMTP Settings"
+   - Selecciona "Sandbox" para desarrollo
+   - Copia las credenciales:
+     - **Host:** `sandbox.smtp.mailtrap.io`
+     - **Port:** `2525`
+     - **Username:** (tu usuario de Mailtrap)
+     - **Password:** (tu contraseña de Mailtrap)
+
+3. **Actualizar configuración en `catalogo1/settings.py`:**
+
+```python
+EMAIL_HOST_USER = 'tu_usuario_mailtrap'
+EMAIL_HOST_PASSWORD = 'tu_contraseña_mailtrap'
+```
+
+4. **Probar el envío de emails:**
+   - Accede a `/contact/` en el navegador
+   - Envía un mensaje de prueba
+   - Revisa tu bandeja de sandbox en Mailtrap para ver el email recibido
+
+**Nota de seguridad:** ⚠️ No subas las credenciales de Mailtrap a repositorios públicos. Considera usar variables de entorno o un archivo `.env` para almacenar credenciales sensibles.
+
+### Ejecutar el servidor de desarrollo
+
+```bash
+python manage.py runserver
+```
+
+El servidor estará disponible en `http://127.0.0.1:8000/`
+
+### Comandos útiles
+
+```bash
+# Crear migraciones
+python manage.py makemigrations
+
+# Aplicar migraciones
+python manage.py migrate
+
+# Crear superusuario
+python manage.py createsuperuser
+
+# Recolectar archivos estáticos
+python manage.py collectstatic
+
+# Verificar configuración
+python manage.py check
+
+# Acceder a la shell de Django
+python manage.py shell
+```
+
+---
+
 ## Arquitectura general
 
 ### Apps y responsabilidades
