@@ -16,6 +16,8 @@ Incluye autenticación de administración, formularios con estilo, filtros de da
 | `contact` | Formulario de contacto | `/contact/` | Usa django-crispy-forms + bootstrap5. |
 | `redes` | Enlaces a redes sociales | `/redes/` | Modelo `LinkRed`; también alimenta el footer vía context processor. |
 | `venta` | Blog / catálogo de productos | `/venta/`, `/venta/categoria/<id>/` | Muestra productos y categorías con el mismo estilo del sitio. |
+| `miapi` | API REST para productos | `/todos/api/productos/` | API con métodos GET y POST sin autorización que consume productos de la app `venta`. |
+| `apiconsumo` | Consumo de API desde la web | `/api-consumo/productos/` | App especializada que consume la API de productos y muestra los datos en la aplicación web. |
 
 Cada app expone su propio `urls.py`, incluido desde `catalogo1/urls.py`, lo que mantiene las responsabilidades separadas y facilita el mantenimiento.
 
@@ -43,6 +45,11 @@ Estos modelos permiten filtrar noticias por categoría, autor y etiqueta, y admi
 - `Category` y `PostProduct`: catálogo/blog de productos relacionados con el hobby.  
 `PostProduct` usa `ManyToMany` con categorías y `ForeignKey` a usuarios.
 
+### Miapi (API)
+- La API REST consume el modelo `PostProduct` de la app `venta`.  
+El modelo `PostProduct` tiene múltiples atributos (title, detail, published, image, author, categories, created, updated) y es coherente con la temática del proyecto.  
+La API implementa métodos GET y POST sin autorización sobre estos productos.
+
 ---
 
 ## Administración personalizada
@@ -67,8 +74,9 @@ Ambos se registran en `TEMPLATES[0]['OPTIONS']['context_processors']` dentro de 
 
 - La app `contact` utiliza **django-crispy-forms** + **crispy-bootstrap5**.  
 - `ContactForm` define un `FormHelper` con layout responsive en `contact/forms.py`.  
-- La vista `contact` (`contact/views.py`) gestiona el POST, muestra mensajes de éxito y redirige.  
+- La vista `contact` (`contact/views.py`) gestiona el POST, envía el mensaje por email a través de **Mailtrap** y muestra mensajes de éxito/error.  
 - El template `contact/contacto.html` renderiza el formulario con `{{ form|crispy }}` y un CTA propio.
+- **Envío de emails**: Los mensajes del formulario de contacto se envían automáticamente a través de Mailtrap y aparecen en la bandeja de sandbox del servicio. La configuración de email se encuentra en `catalogo1/settings.py`.
 
 ---
 
@@ -98,6 +106,115 @@ Ambos se registran en `TEMPLATES[0]['OPTIONS']['context_processors']` dentro de 
 
 ---
 
+## API REST
+
+El proyecto incluye una API REST desarrollada en la app `miapi` que consume productos de la app `venta`. La API funciona localmente y no requiere autenticación.
+
+### Endpoints disponibles
+
+| Método | URL | Descripción |
+|--------|-----|-------------|
+| GET | `/todos/api/productos/` | Obtiene la lista de todos los productos |
+| POST | `/todos/api/productos/` | Crea un nuevo producto |
+
+### Modelo utilizado
+
+La API utiliza el modelo `PostProduct` de la app `venta`, que incluye los siguientes campos:
+- `id`: Identificador único
+- `title`: Título del producto
+- `detail`: Descripción detallada
+- `published`: Fecha de publicación
+- `image`: Imagen del producto (URL absoluta)
+- `author`: ID del autor (usuario)
+- `author_username`: Nombre de usuario del autor (campo serializado)
+- `categories`: IDs de las categorías
+- `categories_names`: Nombres de las categorías (campo serializado)
+- `created`: Fecha de creación
+- `updated`: Fecha de actualización
+
+### Ejemplo de uso GET
+
+```bash
+# Obtener todos los productos
+curl http://localhost:8000/todos/api/productos/
+
+# O desde el navegador
+http://localhost:8000/todos/api/productos/
+```
+
+**Respuesta JSON:**
+```json
+[
+  {
+    "id": 1,
+    "title": "Juego de Estrategia",
+    "detail": "Descripción del juego...",
+    "published": "2025-01-15T10:30:00Z",
+    "image": "http://localhost:8000/media/blog/imagen.jpg",
+    "author": 1,
+    "author_username": "root",
+    "categories": [1, 2],
+    "categories_names": ["Estrategia", "Cartas"],
+    "created": "2025-01-15T10:30:00Z",
+    "updated": "2025-01-15T10:30:00Z"
+  }
+]
+```
+
+### Ejemplo de uso POST
+
+```bash
+# Crear un nuevo producto
+curl -X POST http://localhost:8000/todos/api/productos/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Nuevo Juego",
+    "detail": "Descripción del nuevo juego",
+    "author": 1,
+    "categories": [1]
+  }'
+```
+
+**Nota:** Si no se proporciona `author`, se asignará automáticamente el primer usuario disponible del sistema.
+
+### Vista HTML con formulario
+
+La API incluye una vista HTML que se muestra cuando se accede desde el navegador:
+
+- **URL:** `/todos/api/productos/` (desde navegador muestra HTML, desde API devuelve JSON)
+- **Vista:** `miapi.views.productos_html_view`
+- **Template:** `miapi/templates/miapi/productos.html`
+
+La vista HTML incluye:
+- Formulario para crear productos usando crispy-forms
+- Lista de productos existentes
+- Detección automática: HTML para navegadores, JSON para peticiones API
+
+### Consumo desde la aplicación web
+
+La app `apiconsumo` consume la API mediante GET y muestra los productos en una vista web con estilos:
+
+- **URL de la vista web:** `/api-consumo/productos/`
+- **Vista:** `apiconsumo.views.productos_api`
+- **Template:** `apiconsumo/templates/apiconsumo/productos.html`
+
+La vista consume la API localmente usando `urllib` y renderiza los productos en cards con Bootstrap, mostrando:
+- Imagen del producto
+- Título y descripción
+- Categorías (badges)
+- Autor
+- Fechas de publicación y creación
+
+### Características de la API
+
+- ✅ **Sin autenticación**: La API es pública y no requiere tokens ni credenciales
+- ✅ **Funciona localmente**: Diseñada para desarrollo y pruebas locales
+- ✅ **URLs absolutas**: Las imágenes se devuelven con URLs absolutas para facilitar su uso
+- ✅ **Campos serializados**: Incluye campos adicionales como `author_username` y `categories_names` para facilitar el consumo
+- ✅ **Vista HTML integrada**: Cuando se accede desde el navegador, muestra un formulario HTML para crear productos. Cuando se accede como API (con header `Accept: application/json`), devuelve JSON
+
+---
+
 ## Manejo de errores
 
 - Plantilla custom: `core/templates/core/404.html`.  
@@ -114,17 +231,87 @@ Ambos se registran en `TEMPLATES[0]['OPTIONS']['context_processors']` dentro de 
 - `/contact/` → Formulario de contacto (`contact`)  
 - `/redes/` → Listado de enlaces sociales (`redes`)  
 - `/venta/` y `/venta/categoria/<id>/` → Blog/catalogo de productos (`venta`)  
+- `/todos/api/productos/` → API REST para productos - GET (listar) y POST (crear) sin autorización (`miapi`)  
+La API consume el modelo `PostProduct` de la app `venta`. Cuando se accede desde el navegador muestra un formulario HTML para crear productos.  
+- `/api-consumo/productos/` → Vista web que consume la API de productos (`apiconsumo`)  
 - `/admin/` → Panel de administración (usuario `root` / `root123`)  
 
 ---
 
 ## Requisitos cumplidos
 
-1. **Modelos relacionados**: `Categoria → Noticia → Comentario` + `Autor` y `Etiqueta`.  
-2. **Admin personalizado**: panel extendido con múltiples configuraciones.  
-3. **404 custom**: template, vista y handler configurados.  
-4. **Filtros**: query params en noticias (categoría/autor/etiqueta/búsqueda/orden).  
-5. **Context processors**: banners y enlaces sociales dinámicos.  
-6. **Formulario con crispy**: app `contact`.  
-7. **Apps coherentes**: cada app con responsabilidad clara.  
-8. **URLs por app**: `core`, `posteo`, `contact`, `redes`, `venta` expuestas y enlazadas en el router principal.
+### Requisitos básicos del proyecto
+
+1. ✅ **Modelos relacionados**: `Categoria → Noticia → Comentario` + `Autor` y `Etiqueta`.  
+   - Ubicación: `posteo/models.py`
+   - Estado: Funcionando correctamente
+
+2. ✅ **Admin personalizado**: panel extendido con múltiples configuraciones.  
+   - Ubicación: `posteo/admin.py`
+   - Configuraciones: `list_display`, `list_filter`, `search_fields`, `ordering`, `readonly_fields`, `fieldsets`, `autocomplete_fields`, `list_editable`
+   - Estado: Funcionando correctamente
+
+3. ✅ **404 custom**: template, vista y handler configurados.  
+   - Template: `core/templates/core/404.html`
+   - Vista: `core.views.error_404`
+   - Handler: `handler404 = 'core.views.error_404'` en `catalogo1/urls.py`
+   - Estado: Funcionando correctamente
+
+4. ✅ **Filtros**: query params en noticias (categoría/autor/etiqueta/búsqueda/orden).  
+   - Ubicación: `posteo/views.py` (función `noticias`)
+   - Parámetros: `categoria`, `autor`, `etiqueta`, `q` (búsqueda), `orden`
+   - Estado: Funcionando correctamente
+
+5. ✅ **Context processors**: banners y enlaces sociales dinámicos.  
+   - `core.banner_context`: Selecciona imagen de banner según ruta
+   - `redes.social_links`: Enlaces a redes sociales para footer
+   - Ubicación: `catalogo1/settings.py` (TEMPLATES)
+   - Estado: Funcionando correctamente
+
+6. ✅ **Formulario con crispy**: app `contact`.  
+   - Formulario: `ContactForm` en `contact/forms.py`
+   - Vista: `contact.views.contact`
+   - Template: `contact/templates/contact/contacto.html`
+   - Estado: Funcionando correctamente
+
+7. ✅ **Apps coherentes**: cada app con responsabilidad clara.  
+   - Apps: `core`, `posteo`, `contact`, `redes`, `venta`, `miapi`, `apiconsumo`
+   - Cada app tiene su propio `urls.py` y responsabilidad específica
+   - Estado: Funcionando correctamente
+
+8. ✅ **URLs por app**: `core`, `posteo`, `contact`, `redes`, `venta`, `miapi`, `apiconsumo` expuestas y enlazadas en el router principal.  
+   - Ubicación: `catalogo1/urls.py`
+   - Estado: Funcionando correctamente
+
+### Requisitos de grupos y usuarios
+
+9. ⚠️ **Grupos y usuarios**: sistema de registro con dos grupos (Editores y Moderadores) con diferentes permisos sobre modelos.  
+   - **Nota**: La app `accounts` fue creada pero actualmente no está en `INSTALLED_APPS`. Los grupos "Editores" y "Moderadores" existen en la base de datos (creados por migración `0004_crear_grupos_permisos.py`).
+   - Grupos creados: "Editores" (permisos sobre `Noticia`) y "Moderadores" (permisos sobre `Comentario`)
+   - Migración: `posteo/migrations/0004_crear_grupos_permisos.py`
+   - Estado: Grupos y permisos configurados, pero formularios de registro no activos (app `accounts` no en INSTALLED_APPS)
+
+### Requisitos de comunicación
+
+10. ✅ **Envío de emails**: el formulario de contacto envía mensajes a través de Mailtrap.  
+    - Ubicación: `contact/views.py` (función `contact`)
+    - Configuración Mailtrap: `catalogo1/settings.py` (EMAIL_HOST, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, EMAIL_PORT)
+    - Funcionalidad: Al enviar el formulario, se envía un email a través de Mailtrap que aparece en la bandeja de sandbox
+    - Manejo de errores: Si falla el envío, se muestra un mensaje de error al usuario
+    - Estado: Funcionando correctamente
+
+### Requisitos de API
+
+11. ✅ **API REST**: API desarrollada en `miapi` con métodos GET y POST sin autorización sobre el modelo `PostProduct` de la app `venta`.  
+    - Modelo: `PostProduct` (múltiples atributos: title, detail, published, image, author, categories, created, updated)
+    - Endpoint: `/todos/api/productos/`
+    - Métodos: GET (listar), POST (crear)
+    - Vista HTML: Cuando se accede desde navegador muestra formulario HTML para crear productos
+    - Vista API: Cuando se accede como API (header `Accept: application/json`) devuelve JSON
+    - Estado: Funcionando correctamente
+
+12. ✅ **Consumo de API**: app `apiconsumo` especializada que consume la API mediante GET y muestra los productos en la aplicación web.  
+    - Vista: `apiconsumo.views.productos_api`
+    - Template: `apiconsumo/templates/apiconsumo/productos.html`
+    - URL: `/api-consumo/productos/`
+    - Estado: Funcionando correctamente

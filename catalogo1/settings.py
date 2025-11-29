@@ -30,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-c#$^$*&o=lrij(a=^zx!*0wjm%qr0f0@$f)y-n69yc7dx1f4#('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True  # Temporalmente True para debugging del formulario de contacto
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
@@ -55,7 +55,8 @@ INSTALLED_APPS = [
     'contact',                     # App para formulario de contacto y soporte de
     'venta',                       # App para gestión de ventas y productos
     'redes',                       # App para gestión de enlaces a redes sociales
-    'miapi',                       # App para API de tareas (TODO)
+    'miapi',                       # App para API de juegos (GET y POST)
+    'apiconsumo',                  # App especializada para consumir la API desde la web
     'rest_framework',              # Framework para construir APIs RESTful
     
     # Librerías de terceros
@@ -169,8 +170,39 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_ALLOWED_TEMPLATE_PACKS = ("bootstrap5",)
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
+# =============================================================================
+# CONFIGURACIÓN DE EMAIL (MAILTRAP)
+# =============================================================================
+
 # Looking to send emails in production? Check out our Email API/SMTP product!
+# Configuración para envío de emails a través de Mailtrap (sandbox)
+# Los emails enviados aparecerán en la bandeja de sandbox de Mailtrap
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
 EMAIL_HOST_USER = '712a902e021eb5'
 EMAIL_HOST_PASSWORD = '6fcb32b0a4fb55'
-EMAIL_PORT = '2525'
+EMAIL_PORT = 2525  # Mailtrap sandbox usa puerto 2525 con STARTTLS
+EMAIL_USE_TLS = True  # Mailtrap sandbox requiere STARTTLS (TLS)
+EMAIL_USE_SSL = False
+DEFAULT_FROM_EMAIL = 'noreply@blogfiction.cl'
+
+# =============================================================================
+# CONFIGURACIÓN DE LOGGING (para debugging)
+# =============================================================================
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'contact': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}

@@ -1,0 +1,72 @@
+{% extends 'apiconsumo/base.html' %}
+
+{% block apiconsumo_content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="fw-bold text-primary mb-4">Catálogo de Productos</h2>
+            <p class="text-muted mb-4">
+                Estos productos se obtienen desde nuestra API local mediante el método GET.
+                Los datos provienen de la app <strong>venta</strong>.
+            </p>
+
+            {% if error_message %}
+                <div class="alert alert-danger" role="alert">
+                    <strong>Error:</strong> {{ error_message }}
+                </div>
+            {% endif %}
+
+            {% if productos %}
+                <div class="row g-4">
+                    {% for producto in productos %}
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="card h-100 shadow-sm border-0">
+                                {% if producto.image %}
+                                    <img src="{{ producto.image }}" class="card-img-top" alt="{{ producto.title }}" style="height: 200px; object-fit: cover;">
+                                {% else %}
+                                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                                        <span class="text-white">Sin imagen</span>
+                                    </div>
+                                {% endif %}
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title fw-bold">{{ producto.title }}</h5>
+                                    <p class="card-text text-muted flex-grow-1">
+                                        {{ producto.detail|truncatewords:20 }}
+                                    </p>
+                                    <div class="mt-auto">
+                                        {% if producto.categories_names %}
+                                            <p class="mb-2">
+                                                {% for categoria in producto.categories_names %}
+                                                    <span class="badge bg-primary me-1">{{ categoria }}</span>
+                                                {% endfor %}
+                                            </p>
+                                        {% endif %}
+                                        <p class="mb-2">
+                                            <small class="text-muted">
+                                                <strong>Autor:</strong> {{ producto.author_username|default:"Sin autor" }}
+                                            </small>
+                                        </p>
+                                        <small class="text-muted">
+                                            Publicado: {{ producto.published|date:"d/m/Y"|default:"Sin fecha" }}
+                                        </small>
+                                        <br>
+                                        <small class="text-muted">
+                                            Creado: {{ producto.created|date:"d/m/Y" }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info" role="alert">
+                    <strong>No hay productos disponibles.</strong> 
+                    Los productos se obtienen desde la API de la app venta. Si no hay resultados, puede que la API no tenga datos o haya un problema de conexión.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

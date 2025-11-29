@@ -79,10 +79,14 @@
         }
 
         #banner {
+            {% if 'linear-gradient' in banner_image %}
+            background: {{ banner_image }};
+            {% else %}
             background-image: url({{ banner_image }});
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            {% endif %}
             grid-row: 1;
             grid-column: 1 / 4;
             padding: 40px 20px;
@@ -284,6 +288,6 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script> 
 </body>
 </html>

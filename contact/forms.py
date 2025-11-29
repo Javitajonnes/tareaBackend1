@@ -1,6 +1,6 @@
 from django import forms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Field, Row, Column, Submit
+from crispy_forms.layout import Layout, Field, Row, Column
 
 
 class ContactForm(forms.Form):
@@ -33,5 +33,5 @@ class ContactForm(forms.Form):
                 Column(Field("email"), css_class="col-12 col-md-6 mb-3"),
             ),
             Field("content", css_class="mb-3"),
-            Submit("submit", "Enviar mensaje", css_class="btn btn-primary px-4"),
+            # El botón de envío se agrega directamente en el template
         )
