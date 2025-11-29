@@ -75,8 +75,9 @@ Ambos se registran en `TEMPLATES[0]['OPTIONS']['context_processors']` dentro de 
 - La app `contact` utiliza **django-crispy-forms** + **crispy-bootstrap5**.  
 - `ContactForm` define un `FormHelper` con layout responsive en `contact/forms.py`.  
 - La vista `contact` (`contact/views.py`) gestiona el POST, envía el mensaje por email a través de **Mailtrap** y muestra mensajes de éxito/error.  
-- El template `contact/contacto.html` renderiza el formulario con `{{ form|crispy }}` y un CTA propio.
+- El template `contact/contacto.html` renderiza el formulario con `{{ form|crispy }}` y un botón de envío explícito.
 - **Envío de emails**: Los mensajes del formulario de contacto se envían automáticamente a través de Mailtrap y aparecen en la bandeja de sandbox del servicio. La configuración de email se encuentra en `catalogo1/settings.py`.
+- **Logging**: El sistema incluye logging detallado para debugging del proceso de envío de emails.
 
 ---
 
@@ -294,11 +295,17 @@ La API consume el modelo `PostProduct` de la app `venta`. Cuando se accede desde
 ### Requisitos de comunicación
 
 10. ✅ **Envío de emails**: el formulario de contacto envía mensajes a través de Mailtrap.  
-    - Ubicación: `contact/views.py` (función `contact`)
-    - Configuración Mailtrap: `catalogo1/settings.py` (EMAIL_HOST, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, EMAIL_PORT)
-    - Funcionalidad: Al enviar el formulario, se envía un email a través de Mailtrap que aparece en la bandeja de sandbox
-    - Manejo de errores: Si falla el envío, se muestra un mensaje de error al usuario
-    - Estado: Funcionando correctamente
+    - **Ubicación**: `contact/views.py` (función `contact`)
+    - **Configuración Mailtrap**: `catalogo1/settings.py` 
+      - `EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'`
+      - `EMAIL_HOST = 'sandbox.smtp.mailtrap.io'`
+      - `EMAIL_PORT = 2525`
+      - `EMAIL_USE_TLS = True` (requerido para Mailtrap sandbox)
+      - `EMAIL_HOST_USER` y `EMAIL_HOST_PASSWORD` configurados
+    - **Funcionalidad**: Al enviar el formulario desde `/contact/`, se envía un email a través de Mailtrap que aparece en la bandeja de sandbox
+    - **Manejo de errores**: Si falla el envío, se muestra un mensaje de error al usuario con detalles del problema
+    - **Logging**: Se registran todos los pasos del proceso de envío (validación, preparación, envío, resultado)
+    - **Estado**: ✅ Funcionando correctamente y probado
 
 ### Requisitos de API
 
