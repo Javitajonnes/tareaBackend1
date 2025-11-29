@@ -21,6 +21,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from mail import views
 
 # Lista principal de patrones de URL del proyecto
 urlpatterns = [    
@@ -37,6 +38,7 @@ urlpatterns = [
     path('contact/',include('contact.urls')),
     path('venta/', include('venta.urls')),
     path('redes/', include('redes.urls')),
+     path('send-email/', views.send_example_email, name='send_example_email'),
 ]
 
 # Configuración para servir archivos media en modo desarrollo
