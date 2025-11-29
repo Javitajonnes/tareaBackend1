@@ -386,9 +386,9 @@ El sistema incluye los siguientes usuarios de prueba para diferentes roles:
 | Usuario | Email | Contraseña | Grupo | Staff | Acceso Admin |
 |---------|-------|------------|-------|-------|--------------|
 | `root` | admin@blogfiction.cl | `root123` | - | ✅ | ✅ |
-| `editor1` | editor@example.com | `root123` | - | ✅ | ❌ |
+| `editor1` | editor@example.com | -` | - | ✅ | ❌ |
 | `editor2` | editor2@gmail.com | `root1234` | Editores | ❌ | ✅ |
-| `moderador1` | moderador@example.com | `root123` | - | ✅ | ❌ |
+| `moderador1` | moderador@example.com | - | - | ✅ | ❌ |
 | `moderador2` | mod2@gmail.com | `root1234` | Moderadores | ❌ | ✅ |
 
 **Nota:** Los usuarios pueden registrarse como Editores o Moderadores a través del sistema de registro en `/accounts/`. Los usuarios registrados automáticamente obtienen `is_staff = True` para acceder al panel de administración.
