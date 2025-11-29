@@ -55,6 +55,8 @@ INSTALLED_APPS = [
     'contact',                     # App para formulario de contacto y soporte de
     'venta',                       # App para gestión de ventas y productos
     'redes',                       # App para gestión de enlaces a redes sociales
+    'miapi',                       # App para API de tareas (TODO)
+    'rest_framework',              # Framework para construir APIs RESTful
     
     # Librerías de terceros
     'crispy_forms',

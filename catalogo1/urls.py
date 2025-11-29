@@ -22,6 +22,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from mail import views
+from miapi import urls as todo_urls
 
 # Lista principal de patrones de URL del proyecto
 urlpatterns = [    
@@ -38,7 +39,8 @@ urlpatterns = [
     path('contact/',include('contact.urls')),
     path('venta/', include('venta.urls')),
     path('redes/', include('redes.urls')),
-     path('send-email/', views.send_example_email, name='send_example_email'),
+    path('send-email/', views.send_example_email, name='send_example_email'),
+    path('todos/', include(todo_urls))
 ]
 
 # Configuración para servir archivos media en modo desarrollo
