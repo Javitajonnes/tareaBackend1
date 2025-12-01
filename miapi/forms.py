@@ -1,6 +1,6 @@
 from django import forms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Field, Row, Column, Submit
+from crispy_forms.layout import Layout, Field, Row, Column
 from venta.models import PostProduct, Category
 from django.contrib.auth.models import User
 
@@ -46,6 +46,8 @@ class ProductoForm(forms.ModelForm):
             Field("image", css_class="mb-3"),
             Field("author", css_class="mb-3"),
             Field("categories", css_class="mb-3"),
-            Submit("submit", "Crear Producto", css_class="btn btn-primary px-4"),
+            # El botón de envío se agrega directamente en el template
         )
+
+
 
